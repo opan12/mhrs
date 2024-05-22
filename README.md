@@ -1,2 +1,2 @@
 # mhrs
- 
+ Bu proje, bir hastane yönetim sistemi olarak tasarlanmış bir web uygulamasıdır. Bu web uygulaması, hastaların kayıt oluşturabileceği, doktorlara randevu alabileceği, tıbbi raporları saklayabileceği ve genel olarak sağlıkla ilgili işlemleri yönetebileceği bir platform sunulmaktadır.Hasta rapoları eklediğinde ya da günceleme durumunda bildirimler sayfasından rapor durumunu öğrenebilir..Projemizi Visual Studio (ASP.NET Core MVC), MsSQL, C#, HTML,CSS, JavaScript ve SQL gibi araçlar ve dilleri kullanarak geliştirdik. Data setini Bogus nuget paketten ile üretitik. FakeController üzerinden direkt veri tabanına aktarıp web uygulamamızda veri tabanından çekerek kullandık
