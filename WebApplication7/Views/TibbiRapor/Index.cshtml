@@ -1,0 +1,102 @@
+﻿@model List<WebApplication7.Models.EntityBase.TibbiRapor>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tıbbi Raporlar</title>
+</head>
+<body>
+    <h1>Tıbbi Raporlar</h1>
+    <p><a href="#">Yeni Rapor Ekle</a></p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Rapor ID</th>
+                <th>Rapor Tarihi</th>
+                <th>Rapor İçeriği</th>
+                <th>Resim</th>
+                <th>İndir</th>
+                <th>Sil</th>
+                <th>Güncelle</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rapor in Model)
+            {
+                <tr>
+                    <td>@rapor.RaporID</td>
+                    <td>@rapor.RaporTarihi</td>
+                    <td>@rapor.RaporIcerigi</td>
+                    <td>
+                        <a href="@rapor.RaporURL" target="_blank">Resmi Görüntüle</a>
+                    </td>
+                    <td>
+                        <button class="download-btn" data-rapor-url="@rapor.RaporURL">İndir</button>
+                    </td>
+                    <td>
+                        <a href="#" class="delete-btn" data-rapor-id="@rapor.RaporID">Sil</a>
+                    </td>
+                    <td>
+                        <a href="/TibbiRapor/Edit/@rapor.RaporID">Güncelle</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        $(document).ready(function () {
+            $(".download-btn").click(function () {
+                var fileUrl = $(this).data("rapor-url");
+
+                // Ajax isteği gönderme
+                $.ajax({
+                    url: "/TibbiRapor/DownloadFromUrl?fileUrl=" + encodeURIComponent(fileUrl),
+                    type: "GET",
+                    xhrFields: {
+                        responseType: 'blob' // Yanıtın bir dosya olduğunu belirtme
+                    },
+                    success: function (data) {
+                        // Dosyayı indirme
+                        var a = document.createElement('a');
+                        var url = window.URL.createObjectURL(data);
+                        a.href = url;
+
+                        // Dosya adını belirleme - Sunucudan gelen dosyanın adını koruyoruz
+                        var filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+                        a.download = filename;
+
+                        // a elementini body'e ekleyip otomatik indirme işlemini gerçekleştirme
+                        document.body.appendChild(a);
+                        a.click();
+
+                        // URL'yi temizleme
+                        window.URL.revokeObjectURL(url);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Dosya indirme işlemi başarısız oldu: " + error);
+                    }
+                });
+            });
+
+            $(".delete-btn").click(function () {
+                var raporId = $(this).data("rapor-id");
+
+                // Silme isteği gönderme
+                $.ajax({
+                    url: "/TibbiRapor/Delete?id=" + raporId,
+                    type: "POST",
+                    success: function (data) {
+                        // Sayfayı yenileme
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Rapor silme işlemi başarısız oldu: " + error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

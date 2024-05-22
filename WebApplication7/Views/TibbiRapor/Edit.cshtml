@@ -1,0 +1,40 @@
+﻿@model WebApplication7.Models.EntityBase.TibbiRapor
+
+<h2>Rapor Düzenle</h2>
+
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="RaporID" /> <!-- Gizli alan ile eski rapor ID'si gönderiliyor -->
+    <input type="hidden" asp-for="HastaID" />
+    <div>
+        <label asp-for="RaporTarihi"></label>
+        <input asp-for="RaporTarihi" />
+    </div>
+    <div>
+        <label asp-for="RaporIcerigi"></label>
+        <textarea asp-for="RaporIcerigi"></textarea>
+    </div>
+    <div>
+        <label asp-for="RaporURL"></label>
+        <input asp-for="RaporURL" />
+    </div>
+    <button type="submit">Güncelle</button>
+</form>
+
+
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <strong>Hatalar:</strong>
+        <ul>
+            @foreach (var key in ViewData.ModelState.Keys)
+            {
+                @foreach (var error in ViewData.ModelState[key].Errors)
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            }
+        </ul>
+    </div>
+}

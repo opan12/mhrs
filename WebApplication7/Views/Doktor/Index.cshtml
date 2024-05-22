@@ -1,0 +1,132 @@
+﻿@model Tuple<List<WebApplication7.Models.EntityBase.Doktor>, List<WebApplication7.Models.EntityBase.Hasta>, List<WebApplication7.Models.EntityBase.Randevu>, List<WebApplication7.Models.EntityBase.TibbiRapor>>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doktor Paneli</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+            .btn-info:hover {
+                background-color: #138496;
+                border-color: #117a8b;
+            }
+
+        #sayfaButonlari button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Doktor Paneli</h2>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h4 class="mb-0">Randevu Listesi</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Ad</th>
+                                        <th scope="col">Soyad</th>
+                                        <th scope="col">Randevu Tarihi</th>
+                                        <th scope="col">Randevu Saati</th>
+                                        <th scope="col">Detaylar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="randevuTablosu">
+                                    @foreach (var randevu in Model.Item3) // Randevular listesi
+                                    {
+                                        var hasta = Model.Item2.FirstOrDefault(h => h.HastaID == randevu.HastaID); // Hasta bilgilerini al
+                                        if (hasta != null)
+                                        {
+                                            <tr>
+                                                <td>@hasta.Ad</td>
+                                                <td>@hasta.soyad</td>
+                                                <td>@randevu.RandevuTarihi.ToString("dd.MM.yyyy")</td>
+                                                <td>@randevu.RandevuSaati</td>
+                                                <td>
+                                                    <a href="@Url.Action("Details", "Hasta", new { id = hasta.HastaID })" class="btn btn-sm btn-info">Detaylar</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4" id="sayfaButonlari">
+        <button class="btn btn-primary" id="oncekiSayfa">Önceki Sayfa</button>
+        <button class="btn btn-primary" id="sonrakiSayfa">Sonraki Sayfa</button>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var randevuTablosu = $("#randevuTablosu > tr");
+            var sayfaBasinaGosterilenElemanSayisi = 20;
+            var sayfaNumarasi = 1;
+
+            function goster() {
+                randevuTablosu.hide().slice((sayfaNumarasi - 1) * sayfaBasinaGosterilenElemanSayisi, sayfaNumarasi * sayfaBasinaGosterilenElemanSayisi).show();
+            }
+
+            goster();
+
+            $("#oncekiSayfa").click(function () {
+                if (sayfaNumarasi > 1) {
+                    sayfaNumarasi--;
+                    goster();
+                }
+            });
+
+            $("#sonrakiSayfa").click(function () {
+                if (sayfaNumarasi < Math.ceil(randevuTablosu.length / sayfaBasinaGosterilenElemanSayisi)) {
+                    sayfaNumarasi++;
+                    goster();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

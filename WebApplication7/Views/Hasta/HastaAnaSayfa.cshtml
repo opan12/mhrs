@@ -1,0 +1,95 @@
+﻿@model IEnumerable<WebApplication7.Models.EntityBase.Randevu>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randevular ve Tıbbi Raporlar</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #17a2b8;
+            margin-bottom: 20px;
+        }
+
+        table {
+            background-color: #fff;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        a {
+            color: #17a2b8;
+        }
+
+            a:hover {
+                color: #138496;
+            }
+    </style>
+</head>
+<body>
+    <h2>Randevular</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>Doktor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var randevu in ViewBag.Randevular)
+            {
+                <tr>
+                    <td>@randevu.RandevuTarihi.ToShortDateString()</td>
+                    <td>@randevu.DoktorAdi</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h2>Tıbbi Raporlar</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>Rapor İçeriği</th>
+                <th>Dosya İndir</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rapor in ViewBag.TibbiRaporlar)
+            {
+                <tr>
+                    <td>@rapor.RaporTarihi.ToShortDateString()</td>
+                    <td>@rapor.RaporIcerigi</td>
+                    <td><a href="@Url.Action("DownloadFromUrl", "TibbiRapor", new { fileUrl = rapor.RaporURL })">İndir</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-controller="Randevu" asp-action="Create" class="btn btn-primary">Randevu Al</a>
+</body>
+</html>

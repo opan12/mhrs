@@ -1,0 +1,130 @@
+﻿@model List<WebApplication7.Models.EntityBase.Hasta>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hastalar Listesi</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        table {
+            background-color: #fff;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            margin-right: 5px;
+        }
+
+        .btn-danger {
+            margin-right: 0;
+        }
+
+        .text-center {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hastalar Listesi</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Hasta ID</th>
+                <th>Ad</th>
+                <th>Soyad</th>
+                <th>Cinsiyet</th>
+                <th>Doğum Tarihi</th>
+                <th>Telefon Numarası</th>
+                <th>Adres</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody id="hastaTablosu">
+            @foreach (var hasta in Model)
+            {
+                <tr>
+                    <td>@hasta.HastaID</td>
+                    <td>@hasta.Ad</td>
+                    <td>@hasta.soyad</td>
+                    <td>@hasta.Cinsiyet</td>
+                    <td>@(hasta.DogumTarihi.HasValue ? hasta.DogumTarihi.Value.ToString("dd.MM.yyyy") : "")</td>
+                    <td>@hasta.TelefonNumarasi</td>
+                    <td>@hasta.Adres</td>
+                    <td>
+                        <a href="@Url.Action("Details", "Hasta", new { id = hasta.HastaID })" class="btn btn-info btn-sm">Detaylar</a>
+                        <a href="@Url.Action("Edit", "Hasta", new { id = hasta.HastaID })" class="btn btn-primary btn-sm">Düzenle</a>
+                        <form asp-action="Delete" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@hasta.HastaID" />
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hastayı silmek istediğinizden emin misiniz?')">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center" id="sayfaButonlari">
+        <button class="btn btn-primary" id="oncekiSayfa">Önceki Sayfa</button>
+        <button class="btn btn-primary" id="sonrakiSayfa">Sonraki Sayfa</button>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var hastaTablosu = $("#hastaTablosu > tr");
+            var sayfaBasinaGosterilenElemanSayisi = 20;
+            var sayfaNumarasi = 1;
+
+            function goster() {
+                hastaTablosu.hide().slice((sayfaNumarasi - 1) * sayfaBasinaGosterilenElemanSayisi, sayfaNumarasi * sayfaBasinaGosterilenElemanSayisi).show();
+            }
+
+            goster();
+
+            $("#oncekiSayfa").click(function () {
+                if (sayfaNumarasi > 1) {
+                    sayfaNumarasi--;
+                    goster();
+                }
+            });
+
+            $("#sonrakiSayfa").click(function () {
+                if (sayfaNumarasi < Math.ceil(hastaTablosu.length / sayfaBasinaGosterilenElemanSayisi)) {
+                    sayfaNumarasi++;
+                    goster();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

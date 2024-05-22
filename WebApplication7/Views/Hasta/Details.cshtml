@@ -1,0 +1,293 @@
+﻿@model Tuple<WebApplication7.Models.EntityBase.Hasta, List<WebApplication7.Models.EntityBase.TibbiRapor>, List<WebApplication7.Models.EntityBase.Randevu>>
+
+@{
+    ViewBag.Title = "Hasta Detayları";
+    var tibbiRaporlar = Model.Item2;
+    var randevular = Model.Item3;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="container mt-5">
+        <!-- Hasta Bilgileri -->
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="text-center">Hasta Detayları</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th class="text-right" style="width: 30%;">Ad:</th>
+                                    <td>@Model.Item1.Ad</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-right">Soyad:</th>
+                                    <td>@Model.Item1.soyad</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-right">Cinsiyet:</th>
+                                    <td>@Model.Item1.Cinsiyet</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-right">Doğum Tarihi:</th>
+                                    <td>@Model.Item1.DogumTarihi?.ToString("dd.MM.yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-right">TC:</th>
+                                    <td>@Model.Item1.TC</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-right">Telefon Numarası:</th>
+                                    <td>@Model.Item1.TelefonNumarasi</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-right">Adres:</th>
+                                    <td>@Model.Item1.Adres</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tıbbi Raporlar -->
+        <div class="row mt-4">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="text-center">Tıbbi Raporlar</h3>
+                    </div>
+                    <div class="card-body">
+                        @if (tibbiRaporlar != null && tibbiRaporlar.Count > 0)
+                        {
+                            @for (var i = 0; i < tibbiRaporlar.Count; i += 10)
+                            {
+                                <div class="tibbi-rapor-grup">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Rapor Tarihi</th>
+                                                    <th scope="col">Rapor İçeriği</th>
+                                                    <th scope="col">İşlemler</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (var j = i; j < Math.Min(i + 10, tibbiRaporlar.Count); j++)
+                                                {
+                                                    var rapor = tibbiRaporlar[j];
+                                                    <tr>
+                                                        <td>@rapor.RaporTarihi.ToString("dd.MM.yyyy")</td>
+                                                        <td>@rapor.RaporIcerigi</td>
+                                                        <td>
+                                                            <button class="btn btn-success btn-sm download-btn" data-rapor-url="@rapor.RaporURL">İndir</button>
+                                                            <button class="btn btn-danger btn-sm delete-btn" data-rapor-id="@rapor.RaporID">Sil</button>
+                                                            <a href="@Url.Action("Edit", "TibbiRapor", new { id = rapor.RaporID, hastaId = rapor.HastaID })" class="btn btn-warning btn-sm">Güncelle</a>
+
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- Sayfalama kontrolleri -->
+                                    <div class="text-center mt-3">
+                                        @if (i > 0)
+                                        {
+                                            <button class="btn btn-secondary mr-2 prev-report-group">Önceki Grup</button>
+                                        }
+                                        @if (i + 10 < tibbiRaporlar.Count)
+                                        {
+                                            <button class="btn btn-secondary next-report-group">Sonraki Grup</button>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-center">Bu hasta için tıbbi rapor bulunmamaktadır.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Randevular -->
+        <div class="row mt-4">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h3 class="text-center">Randevular</h3>
+                    </div>
+                    <div class="card-body">
+                        @if (randevular != null && randevular.Count > 0)
+                        {
+                            @for (var i = 0; i < randevular.Count; i += 10)
+                            {
+                                <div class="randevu-grup">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Randevu Tarihi</th>
+                                                    <th scope="col">Randevu Saati</th>
+                                                    <th scope="col">Doktor ID</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (var j = i; j < Math.Min(i + 10, randevular.Count); j++)
+                                                {
+                                                    var randevu = randevular[j];
+                                                    <tr>
+                                                        <td>@randevu.RandevuTarihi.ToString("dd.MM.yyyy")</td>
+                                                        <td>@randevu.RandevuSaati</td>
+                                                        <td>@randevu.DoktorID</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- Sayfalama kontrolleri -->
+                                    <div class="text-center mt-3">
+                                        @if (i > 0)
+                                        {
+                                            <button class="btn btn-secondary mr-2 prev-appointment-group">Önceki Grup</button>
+                                        }
+                                        @if (i + 10 < randevular.Count)
+                                        {
+                                            <button class="btn btn-secondary next-appointment-group">Sonraki Grup</button>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-center">Bu hasta için randevu bulunmamaktadır.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rapor Ekleme Düğmesi -->
+        <div class="row mt-4">
+            <div class="col-md-8 offset-md-2">
+                <div class="text-center">
+                    <a href="@Url.Action("Create", "TibbiRapor", new { hastaID = Model.Item1.HastaID })" class="btn btn-primary">Rapor Ekle</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Tıbbi rapor sayfalandırma işlemleri
+            $(".tibbi-rapor-grup").hide(); // Sayfaların başlangıcında tüm rapor gruplarını gizle
+
+            $(".tibbi-rapor-grup").first().show(); // İlk rapor grubunu göster
+
+            $(".next-report-group").click(function () {
+                var currentGroup = $(this).closest(".tibbi-rapor-grup");
+                currentGroup.hide(); // Geçerli grup gizlenir
+                currentGroup.next().show(); // Sonraki grup gösterilir
+            });
+
+            $(".prev-report-group").click(function () {
+                var currentGroup = $(this).closest(".tibbi-rapor-grup");
+                currentGroup.hide(); // Geçerli grup gizlenir
+                currentGroup.prev().show(); // Önceki grup gösterilir
+            });
+
+            // Randevu sayfalandırma işlemleri
+            $(".randevu-grup").hide(); // Sayfaların başlangıcında tüm randevu gruplarını gizle
+
+            $(".randevu-grup").first().show(); // İlk randevu grubunu göster
+
+            $(".next-appointment-group").click(function () {
+                var currentGroup = $(this).closest(".randevu-grup");
+                currentGroup.hide(); // Geçerli grup gizlenir
+                currentGroup.next().show(); // Sonraki grup gösterilir
+            });
+
+            $(".prev-appointment-group").click(function () {
+                var currentGroup = $(this).closest(".randevu-grup");
+                currentGroup.hide(); // Geçerli grup gizlenir
+                currentGroup.prev().show(); // Önceki grup gösterilir
+            });
+
+            // İndirme işlemi için AJAX kodu buraya eklenecek.
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".download-btn").click(function () {
+                var fileUrl = $(this).data("rapor-url");
+
+                // AJAX isteği gönderme
+                $.ajax({
+                    url: "/TibbiRapor/DownloadFromUrl?fileUrl=" + encodeURIComponent(fileUrl),
+                    type: "GET",
+                    xhrFields: {
+                        responseType: 'blob' // Yanıtın bir dosya olduğunu belirtme
+                    },
+                    success: function (data) {
+                        // Dosyayı indirme
+                        var a = document.createElement('a');
+                        var url = window.URL.createObjectURL(data);
+                        a.href = url;
+                        a.download = fileUrl.split('/').pop(); // Dosya adını belirleme
+                        document.body.append(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".delete-btn").click(function () {
+                var raporId = $(this).data("rapor-id");
+                var hastaId = $(this).data("hasta-id");
+
+                if (confirm("Bu raporu silmek istediğinizden emin misiniz?")) {
+                    $.ajax({
+                        url: "/TibbiRapor/Delete",
+                        type: "POST",
+                        data: { raporId: raporId, hastaId: hastaId },
+                        success: function () {
+                            // Silme işlemi başarılı olduğunda sayfayı yenile
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            // Hata durumunda kullanıcıya bir mesaj göster
+                            alert("Rapor silinirken bir hata oluştu: " + error);
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
+
+
+
+</body>
+</html>

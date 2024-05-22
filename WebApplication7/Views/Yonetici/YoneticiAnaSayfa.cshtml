@@ -1,0 +1,48 @@
+﻿@model WebApplication7.Models.EntityBase.Doktor
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Doktor Ekle</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://tr.pngtree.com/freebackground/doctor-holding-stethoscope-posture-hd-large-picture_1701819.html');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mb-4">Yeni Doktor Ekle</h2>
+
+        <!-- Doktor sayfasına git butonu -->
+        <a href="/Doktor/Create" class="btn btn-secondary">Doktor Sayfasına Git</a>
+        <a href="/Hasta/Create" class="btn btn-secondary">Hasta Sayfasına Git</a>
+        <a href="/Yonetici/TibbiRaporEkleme" class="btn btn-secondary">Tıbbi Rapor Ekle</a>
+
+        <!-- Yeni eklenen butonlar -->
+        <a href="/Hasta/HastaListesi" class="btn btn-secondary">Hasta Listesi</a>
+        <a href="/Doktor/DoktorListesiView" class="btn btn-secondary">Doktor Listesi</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,3 +1,5 @@
+using WebApplication7.Controllers;
+
 public class Program
 {
     public static void Main(string[] args)
@@ -13,6 +15,9 @@ public class Program
 
         // Add controllers and other services
         builder.Services.AddControllersWithViews();
+        builder.Services.AddScoped<IDoktorController, DoktorService>();
+        builder.Services.AddScoped<IHastaController, HastaService>();
+
 
         var app = builder.Build();
 
@@ -20,14 +25,17 @@ public class Program
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
+            app.UseHsts();
         }
+
+        app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthorization();
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+            pattern: "{controller=User}/{action=Login}/{id?}");
 
         app.Run();
     }

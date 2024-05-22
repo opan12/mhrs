@@ -1,0 +1,70 @@
+﻿@model WebApplication7.Models.EntityBase.TibbiRapor
+
+@{
+    ViewBag.Title = "Yeni Tıbbi Rapor Oluştur";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Tıbbi Rapor Oluştur</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body style="background-color: #f8f9fa;">
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Yeni Tıbbi Rapor Oluştur</h2>
+        <form asp-action="Create" method="post" class="form-horizontal">
+            <div class="form-group row">
+                <label for="RaporTarihi" class="col-md-2 col-form-label">Rapor Tarihi</label>
+                <div class="col-md-10">
+                    <input asp-for="RaporTarihi" class="form-control" id="RaporTarihi" />
+                    <span asp-validation-for="RaporTarihi" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="RaporIcerigi" class="col-md-2 col-form-label">Rapor İçeriği</label>
+                <div class="col-md-10">
+                    <textarea asp-for="RaporIcerigi" class="form-control" id="RaporIcerigi"></textarea>
+                    <span asp-validation-for="RaporIcerigi" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="RaporURL" class="col-md-2 col-form-label">Rapor URL</label>
+                <div class="col-md-10">
+                    <input asp-for="RaporURL" class="form-control" id="RaporURL" />
+                    <span asp-validation-for="RaporURL" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="HastaID" class="col-md-2 col-form-label">Hasta ID</label>
+                <div class="col-md-10">
+                    <input asp-for="HastaID" class="form-control" readonly id="HastaID" />
+                    <span asp-validation-for="HastaID" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="DoktorID" class="col-md-2 col-form-label">Doktor ID</label>
+                <div class="col-md-10">
+                    <input asp-for="DoktorID" class="form-control" readonly id="DoktorID" value="@ViewBag.DoktorID" />
+                    <span asp-validation-for="DoktorID" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Kaydet" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+        
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

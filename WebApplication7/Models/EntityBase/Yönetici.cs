@@ -2,5 +2,7 @@
 {
     public class Yönetici:Kisi
     {
+        public int YoneticiID { get; set; }
+
     }
 }

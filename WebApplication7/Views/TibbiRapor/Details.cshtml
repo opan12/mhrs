@@ -1,0 +1,139 @@
+﻿@model WebApplication7.Models.EntityBase.Hasta
+
+@{
+    ViewBag.Title = "Hasta Detayları";
+    var tibbiRaporlar = ViewBag.TibbiRaporlar as List<WebApplication7.Models.EntityBase.TibbiRapor>;
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center">Hasta Detayları</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th class="text-right" style="width: 30%;">Ad:</th>
+                                <td>@Model.Ad</td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Soyad:</th>
+                                <td>@Model.soyad</td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Cinsiyet:</th>
+                                <td>@Model.Cinsiyet</td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Doğum Tarihi:</th>
+                                <td>@Model.DogumTarihi?.ToString("dd.MM.yyyy")</td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">TC:</th>
+                                <td>@Model.TC</td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Telefon Numarası:</th>
+                                <td>@Model.TelefonNumarasi</td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Adres:</th>
+                                <td>@Model.Adres</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3 class="text-center">Tıbbi Raporlar</h3>
+                </div>
+                <div class="card-body">
+                    @if (tibbiRaporlar != null && tibbiRaporlar.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Rapor Tarihi</th>
+                                        <th scope="col">Rapor İçeriği</th>
+                                        <th scope="col">İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var rapor in tibbiRaporlar)
+                                    {
+                                        <tr>
+                                            <td>@rapor.RaporTarihi.ToString("dd.MM.yyyy")</td>
+                                            <td>@rapor.RaporIcerigi</td>
+                                            <td>
+                                                <a href="@Url.Action("Details", "TibbiRapor", new { id = rapor.RaporID })" class="btn btn-info btn-sm">İncele</a>
+                                                <button class="btn btn-success btn-sm download-btn" data-rapor-url="@rapor.RaporURL">İndir</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-center">Bu hasta için tıbbi rapor bulunmamaktadır.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8 offset-md-2">
+            <div class="text-center">
+                <a href="@Url.Action("Create", "TibbiRapor", new { hastaID = Model.HastaID })" class="btn btn-primary">Rapor Ekle</a>
+                <a href="@Url.Action("Index", "Doktor")" class="btn btn-secondary ml-2">Geri Dön</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".download-btn").click(function () {
+            var fileUrl = $(this).data("rapor-url");
+
+            $.ajax({
+                url: "/TibbiRapor/DownloadFromUrl",
+                type: "GET",
+                data: { fileUrl: fileUrl },
+                xhrFields: {
+                    responseType: 'blob' // Yanıt türünü blob olarak belirtin
+                },
+                success: function (data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+
+                    var filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+                    a.download = filename;
+
+                    document.body.appendChild(a);
+                    a.click();
+
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                },
+                error: function (xhr, status, error) {
+                    alert("Dosya indirme işlemi başarısız oldu: " + error);
+                }
+            });
+        });
+    });
+</script>

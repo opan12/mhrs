@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Doktor Ekle</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('doctor-icon.png');
+            background-size: cover;
+            background-position: center;
+            background-color: #2980b9;
+            color: #fff;
+        }
+
+        .container {
+            margin: auto;
+            width: 50%;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #2980b9;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #eee;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Yeni Doktor Ekle</h1>
+        <form action="#" method="post">
+            <label for="Ad">Ad:</label>
+            <input type="text" id="Ad" name="Ad" required>
+            <label for="Soyad">Soyad:</label>
+            <input type="text" id="Soyad" name="Soyad" required>
+            <label for="UzmanlikAlani">Uzmanlık Alanı:</label>
+            <input type="text" id="UzmanlikAlani" name="UzmanlikAlani" required>
+            <label for="CalistigiHastane">Çalıştığı Hastane:</label>
+            <input type="text" id="CalistigiHastane" name="CalistigiHastane" required>
+            <label for="TC">TC Kimlik No:</label>
+            <input type="number" id="TC" name="TC" required>
+            <label for="Parola">Parola:</label>
+            <input type="password" id="Parola" name="Parola" required>
+            <button type="submit">Ekle</button>
+        </form>
+    </div>
+</body>
+</html>

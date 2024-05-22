@@ -1,0 +1,100 @@
+﻿@model WebApplication7.Models.EntityBase.Randevu
+
+<h2>Randevu Oluştur</h2>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="HastaID" value="@ViewBag.HastaID" />
+
+    <div class="form-group">
+        <label asp-for="RandevuTarihi">Randevu Tarihi</label>
+        <input asp-for="RandevuTarihi" type="date" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="RandevuSaati">Randevu Saati</label>
+        <input asp-for="RandevuSaati" type="time" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="UzmanlikAlani">Uzmanlık Alanı</label>
+        <select id="UzmanlikAlani" class="form-control">
+            <option value="">Uzmanlık alanı seçiniz</option>
+            @foreach (var uzmanlik in ViewBag.UzmanlikAlanlari)
+            {
+                <option value="@uzmanlik.Value">@uzmanlik.Text</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="CalistigiHastane">Çalıştığı Hastane</label>
+        <select id="CalistigiHastane" class="form-control">
+            <option value="">Hastane seçiniz</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="DoktorID">Doktor</label>
+        <select id="DoktorID" asp-for="DoktorID" class="form-control">
+            <option value="">Doktor seçiniz</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+
+@section Scripts {
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#UzmanlikAlani').change(function () {
+                var uzmanlikAlani = $(this).val();
+                if (uzmanlikAlani) {
+                    $.getJSON('@Url.Action("GetHastaneler", "Randevu")', { uzmanlikAlani: uzmanlikAlani }, function (data) {
+                        var hastaneSelect = $('#CalistigiHastane');
+                        hastaneSelect.empty();
+                        hastaneSelect.append('<option value="">Çalıştığı Hastane Seçiniz</option>');
+                        $.each(data, function (i, item) {
+                            hastaneSelect.append('<option value="' + item + '">' + item + '</option>');
+                        });
+                    });
+                } else {
+                    $('#CalistigiHastane').empty();
+                    $('#CalistigiHastane').append('<option value="">Çalıştığı Hastane Seçiniz</option>');
+                    $('#DoktorID').empty();
+                    $('#DoktorID').append('<option value="">Doktor Seçiniz</option>');
+                }
+            });
+
+            $('#CalistigiHastane').change(function () {
+                var uzmanlikAlani = $('#UzmanlikAlani').val();
+                var hastane = $(this).val();
+                if (uzmanlikAlani && hastane) {
+                    $.getJSON('@Url.Action("GetDoktorlar", "Randevu")', { uzmanlikAlani: uzmanlikAlani, hastane: hastane }, function (data) {
+                        var doktorSelect = $('#DoktorID');
+                        doktorSelect.empty();
+                        doktorSelect.append('<option value="">Doktor Seçiniz</option>');
+                        $.each(data, function (i, doktor) {
+                            doktorSelect.append('<option value="' + doktor.value + '">' + doktor.text + '</option>');
+                        });
+                    });
+                } else {
+                    $('#DoktorID').empty();
+                    $('#DoktorID').append('<option value="">Doktor Seçiniz</option>');
+                }
+            });
+        });
+    </script>
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <strong>Hatalar:</strong>
+        <ul>
+            @foreach (var key in ViewData.ModelState.Keys)
+            {
+                @foreach (var error in ViewData.ModelState[key].Errors)
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            }
+        </ul>
+    </div>
+}

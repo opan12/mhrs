@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasta Bilgileri</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            margin-right: 5px;
+        }
+
+        #randevuListesi li,
+        #raporListesi li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+    <div class="container">
+        <h1>Hasta Bilgileri</h1>
+
+        <div>
+            <h3>@Model.Ad @Model.soyad</h3>
+            <p><strong>Doğum Tarihi:</strong> @Model.DogumTarihi.ToShortDateString()</p>
+            <p><strong>Cinsiyet:</strong> @Model.Cinsiyet</p>
+            <p><strong>Telefon Numarası:</strong> @Model.TelefonNumarasi</p>
+            <p><strong>Adres:</strong> @Model.Adres</p>
+
+            <h4>Randevular</h4>
+            <ul id="randevuListesi">
+                @if (ViewBag.Randevular != null)
+                {
+                    foreach (var randevu in ViewBag.Randevular)
+                    {
+                        <li>
+                            <strong>Tarih:</strong> @randevu.RandevuTarihi.ToShortDateString() -
+                            <strong>Saat:</strong> @randevu.RandevuSaati -
+                            <strong>Doktor:</strong> @randevu.DoktorID
+                            <form asp-action="Delete" asp-controller="Randevu" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@randevu.RandevuID" />
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Bu randevuyu silmek istediğinize emin misiniz?');">Sil</button>
+                            </form>
+                        </li>
+                    }
+                }
+            </ul>
+            <button id="oncekiSayfaRandevu" class="btn btn-primary">Önceki Randevu Sayfa</button>
+            <button id="sonrakiSayfaRandevu" class="btn btn-primary">Sonraki Randevu Sayfa</button>
+
+            <h4>Tıbbi Raporlar</h4>
+            <ul id="raporListesi">
+                @if (ViewBag.TibbiRaporlar != null)
+                {
+                    foreach (var rapor in ViewBag.TibbiRaporlar)
+                    {
+                        <li>
+                            <strong>Tarih:</strong> @rapor.RaporTarihi.ToShortDateString() -
+                            <strong>İçerik:</strong> @rapor.RaporIcerigi
+                            <button class="btn btn-success btn-sm download-btn" data-rapor-url="@rapor.RaporURL">İndir</button>
+                        </li>
+                    }
+                }
+            </ul>
+            <button id="oncekiSayfaRapor" class="btn btn-primary">Önceki Rapor Sayfa</button>
+            <button id="sonrakiSayfaRapor" class="btn btn-primary">Sonraki Rapor Sayfa</button>
+
+            <p>
+                <a asp-controller="Randevu" asp-action="Create" asp-route-hastaId="@Model.HastaID" class="btn btn-primary">Yeni Randevu Al</a>
+                <a asp-controller="TibbiRapor" asp-action="Notification" class="btn btn-warning">Bildirimler</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var randevuListesi = $("#randevuListesi > li");
+            var raporListesi = $("#raporListesi > li");
+            var sayfaBasinaGosterilenElemanSayisi = 10;
+            var sayfaNumarasiRandevu = 1;
+            var sayfaNumarasiRapor = 1;
+
+            function gosterRandevular() {
+                randevuListesi.hide().slice((sayfaNumarasiRandevu - 1) * sayfaBasinaGosterilenElemanSayisi, sayfaNumarasiRandevu * sayfaBasinaGosterilenElemanSayisi).show();
+            }
+            function gosterRaporlar() {
+                raporListesi.hide().slice((sayfaNumarasiRapor - 1) * sayfaBasinaGosterilenElemanSayisi, sayfaNumarasiRapor * sayfaBasinaGosterilenElemanSayisi).show();
+            }
+
+            gosterRandevular();
+            gosterRaporlar();
+
+            $("#oncekiSayfaRandevu").click(function () {
+                if (sayfaNumarasiRandevu > 1) {
+                    sayfaNumarasiRandevu--;
+                    gosterRandevular();
+                }
+            });
+
+            $("#sonrakiSayfaRandevu").click(function () {
+                if (sayfaNumarasiRandevu < Math.ceil(randevuListesi.length / sayfaBasinaGosterilenElemanSayisi)) {
+                    sayfaNumarasiRandevu++;
+                    gosterRandevular();
+                }
+            });
+
+            $("#oncekiSayfaRapor").click(function () {
+                if (sayfaNumarasiRapor > 1) {
+                    sayfaNumarasiRapor--;
+                    gosterRaporlar();
+                }
+            });
+
+            $("#sonrakiSayfaRapor").click(function () {
+                if (sayfaNumarasiRapor < Math.ceil(raporListesi.length / sayfaBasinaGosterilenElemanSayisi)) {
+                    sayfaNumarasiRapor++;
+                    gosterRaporlar();
+                }
+            });
+
+            $(".download-btn").click(function () {
+                var fileUrl = $(this).data("rapor-url");
+
+                // Ajax isteği gönderme
+                $.ajax({
+                    url: "/TibbiRapor/DownloadFromUrl?fileUrl=" + encodeURIComponent(fileUrl),
+                    type: "GET",
+                    xhrFields: {
+                        responseType: 'blob' // Yanıtın bir dosya olduğunu belirtme
+                    },
+                    success: function (data) {
+                        // Dosyayı indirme
+                        var a = document.createElement('a');
+                        var url = window.URL.createObjectURL(data);
+                        a.href = url;
+                        a.download = fileUrl.split('/').pop(); // Dosya adını belirleme
+                        document.body.append(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+                    }
+                });
+            });
+        });
+    </script>

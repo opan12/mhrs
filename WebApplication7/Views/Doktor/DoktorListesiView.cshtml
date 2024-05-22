@@ -1,0 +1,131 @@
+﻿@model List<WebApplication7.Models.EntityBase.Doktor>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doktorlar Listesi</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        #sayfaButonlari {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Doktorlar Listesi</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Doktor ID</th>
+                    <th>Ad</th>
+                    <th>Soyad</th>
+                    <th>Uzmanlık Alanı</th>
+                    <th>Çalıştığı Hastane</th>
+                    <th></th> <!-- Sil düğmesi için boş bir sütun -->
+                    <th></th> <!-- Düzenleme bağlantısı için boş bir sütun -->
+                </tr>
+            </thead>
+            <tbody id="doktorTablosu">
+                @foreach (var doktor in Model)
+                {
+                    <tr>
+                        <td>@doktor.DoktorID</td>
+                        <td>@doktor.Ad</td>
+                        <td>@doktor.soyad</td>
+                        <td>@doktor.UzmanlikAlani</td>
+                        <td>@doktor.CalistigiHastane</td>
+                        <td>
+                            <form asp-action="Delete" method="post">
+                                <input type="hidden" name="id" value="@doktor.DoktorID" />
+                                <button type="submit" class="btn btn-danger">Sil</button>
+                            </form>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Doktor", new { id = doktor.DoktorID })" class="btn btn-primary">Düzenle</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-center" id="sayfaButonlari">
+            <button class="btn btn-primary" id="oncekiSayfa">Önceki Sayfa</button>
+            <button class="btn btn-primary" id="sonrakiSayfa">Sonraki Sayfa</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var doktorTablosu = $("#doktorTablosu > tr");
+            var sayfaBasinaGosterilenElemanSayisi = 20;
+            var sayfaNumarasi = 1;
+
+            function goster() {
+                doktorTablosu.hide().slice((sayfaNumarasi - 1) * sayfaBasinaGosterilenElemanSayisi, sayfaNumarasi * sayfaBasinaGosterilenElemanSayisi).show();
+            }
+
+            goster();
+
+            $("#oncekiSayfa").click(function () {
+                if (sayfaNumarasi > 1) {
+                    sayfaNumarasi--;
+                    goster();
+                }
+            });
+
+            $("#sonrakiSayfa").click(function () {
+                if (sayfaNumarasi < Math.ceil(doktorTablosu.length / sayfaBasinaGosterilenElemanSayisi)) {
+                    sayfaNumarasi++;
+                    goster();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+﻿@model WebApplication7.WebApi.ViewModels.AuthRegisterViewModel
+
+<h2>Kayıt Ol</h2>
+
+<form asp-action="Register" asp-controller="User" method="get">
+    <div class="form-group">
+        <label asp-for="Ad">Ad:</label>
+        <input asp-for="Ad" class="form-control" />
+        <span asp-validation-for="Ad" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="soyad">Soyad:</label>
+        <input asp-for="soyad" class="form-control" />
+        <span asp-validation-for="soyad" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Parola">Parola:</label>
+        <input asp-for="Parola" type="password" class="form-control" />
+        <span asp-validation-for="Parola" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TC">T.C. Kimlik Numarası:</label>
+        <input asp-for="TC" class="form-control" />
+        <span asp-validation-for="TC" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+</form>

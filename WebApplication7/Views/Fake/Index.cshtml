@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Fake Data Generator";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Use the buttons below to generate fake data.</p>
+
+<form asp-action="GenerateFakeData" asp-controller="Fake" method="post">
+    <button type="submit" class="btn btn-primary">Generate Fake Data</button>
+</form>

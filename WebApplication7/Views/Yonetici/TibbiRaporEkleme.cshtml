@@ -1,0 +1,64 @@
+﻿@model WebApplication7.Models.EntityBase.TibbiRapor
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Tıbbi Rapor Oluştur</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Yeni Tıbbi Rapor Oluştur</h2>
+        <form asp-action="TibbiRaporEkleme" method="post">
+            <div class="form-group row">
+                <label for="RaporTarihi" class="col-sm-2 col-form-label">Rapor Tarihi</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="RaporTarihi" name="RaporTarihi">
+                    <span class="text-danger">Validation Message</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="RaporIcerigi" class="col-sm-2 col-form-label">Rapor İçeriği</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="RaporIcerigi" name="RaporIcerigi" rows="4"></textarea>
+                    <span class="text-danger">Validation Message</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="RaporURL" class="col-sm-2 col-form-label">Rapor URL</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="RaporURL" name="RaporURL">
+                    <span class="text-danger">Validation Message</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="HastaID" class="col-sm-2 col-form-label">Hasta ID</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="HastaID" name="HastaID" readonly>
+                    <span class="text-danger">Validation Message</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="DoktorID" class="col-sm-2 col-form-label">Doktor ID</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="DoktorID" name="DoktorID">
+                    <span class="text-danger">Validation Message</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </div>
+        </form>
+        <div class="mt-4">
+            <a asp-action="YoneticiAnaSayfa" class="btn btn-secondary">Geri Dön</a>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

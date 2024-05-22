@@ -1,0 +1,112 @@
+﻿@model WebApplication7.Models.EntityBase.Doktor
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doktor Düzenle</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+            .alert-danger ul {
+                list-style-type: none;
+                padding-left: 0;
+            }
+
+                .alert-danger ul li {
+                    margin-left: 0;
+                    padding-left: 0;
+                }
+    </style>
+</head>
+<body>
+    <h2>Doktor Düzenle</h2>
+
+    @using (Html.BeginForm("Edit", "Doktor", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.DoktorID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ad)
+            @Html.TextBoxFor(model => model.Ad, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Ad)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.soyad)
+            @Html.TextBoxFor(model => model.soyad, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.soyad)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.UzmanlikAlani)
+            @Html.TextBoxFor(model => model.UzmanlikAlani, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.UzmanlikAlani)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CalistigiHastane)
+            @Html.TextBoxFor(model => model.CalistigiHastane, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CalistigiHastane)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TC)
+            @Html.TextBoxFor(model => model.TC, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TC)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Parola)
+            @Html.TextBoxFor(model => model.Parola, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Parola)
+        </div>
+
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <strong>Hatalar:</strong>
+            <ul>
+                @foreach (var key in ViewData.ModelState.Keys)
+                {
+                    @foreach (var error in ViewData.ModelState[key].Errors)
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+</body>
+</html>
